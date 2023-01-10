@@ -3,6 +3,9 @@ package personal.Tu.Controller;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
@@ -12,15 +15,20 @@ import org.springframework.web.servlet.ModelAndView;
 import personal.Tu.Entity.Image;
 import personal.Tu.Model.ImageModel;
 import personal.Tu.Service.IImageService;
+import personal.Tu.Service.IStorageService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("admin/Images") // Mac dinh la get
 public class ImageController {
     @Autowired
     IImageService imageService;
+
+    @Autowired
+    IStorageService storageService;
 
     @RequestMapping("")
     public String listImages(ModelMap modelMap){
@@ -47,6 +55,17 @@ public class ImageController {
         Image ImageEntity = new Image();
         // Coppy từ model sang entity
         BeanUtils.copyProperties(image, ImageEntity);
+
+        // Xử lý hình ảnh
+        if (!image.getImageFile().isEmpty()){
+            // Lưu file vào trường image
+            UUID Id = UUID.randomUUID();
+            String uuString = Id.toString();
+            image.setImage(storageService.getStorageFileName(image.getImageFile(), uuString));
+            storageService.store(image.getImageFile(), ImageEntity.getImage());
+        }
+
+        //
         imageService.save(ImageEntity);
         String message = "Video đã được cập nhật thành công";
         model.addAttribute("message", message);
@@ -88,5 +107,14 @@ public class ImageController {
         model.addAttribute("Images", list);
         System.out.println(list);
         return "admin/images/list";
+    }
+
+    // Hiển thị hình ảnh images
+    @GetMapping("/image/{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> serverFile(@PathVariable String filename){
+            Resource file = storageService.loadAsResource(filename);
+            return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                    "attachment;filename=\""+file.getFilename()+"\"").body(file);
     }
 }

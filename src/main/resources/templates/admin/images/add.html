@@ -9,7 +9,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Hello, world!</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+          integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
 </head>
 
 <body>
@@ -34,38 +36,40 @@
                             <td><input type="text" name="name" th:value="${Image.name }"/></td>
                         </tr>
                     </table>
-                                        <div class="col-5">
-                                            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
-                                                    integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
-                                                    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-                                            <script type="text/javascript">
-                                                function chooseFile(fileInput) {
-                                                    if (fileInput.files && fileInput.files[0]) {
-                                                        var reader = new FileReader();
-                                                        reader.onload = function (e) {
-                                                            $('#image').attr('src', e.target.result);
-                                                        }
-                                                        reader.readAsDataURL(fileInput.files[0]);
-                                                    }
-                                                }
-                                            </script>
-                                            <img th:if="${Image.image != null}" th:src="@{/admin/images/${Image.image}}" width="70"
-                                                 class="img-fluid"/>
-                                            <br/>
-                                            <div class="mb-3">
-                                                <label for="imageFile" class="form-label">Image File:</label>
-                                                <input
-                                                        type="file" class="form-control-file" th:value="${Image.imageFile}" id="imageFile"
-                                                        name="imageFile"
-                                                        aria-describedby="imageFile" placeholder="video Image"
-                                                        onchange="chooseFile(this)" accept=".ipg, .png">
-                                            </div>
-                                        </div>
+                    <div class="col-5">
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
+                                integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
+                                crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                        <script type="text/javascript">
+                            function chooseFile(fileInput) {
+                                if (fileInput.files && fileInput.files[0]) {
+                                    var reader = new FileReader();
+                                    reader.onload = function (e) {
+                                        $('#image').attr('src', e.target.result);
+                                    }
+                                    reader.readAsDataURL(fileInput.files[0]);
+                                }
+                            }
+                        </script>
+                        <img th:if="${Image.image != null}" th:src="@{/admin/images/${Image.image}}" width="70"
+                             class="img-fluid"/>
+                        <img th:if="${Image.image == null}" th:src="@{/images/noimage.jpg}" width="70"
+                             class="img-fluid"/>
+                        <br/>
+                        <div class="mb-3">
+                            <label for="imageFile" class="form-label">Image File:</label>
+                            <input
+                                    type="file" class="form-control-file" th:value="${Image.imageFile}" id="imageFile"
+                                    name="imageFile"
+                                    aria-describedby="imageFile" placeholder="video Image"
+                                    onchange="chooseFile(this)" accept=".ipg, .png">
+                        </div>
+                    </div>
                     <div class="p-3">
                         <a th:href="@{/admin/Images}" class="btn btn-success">
                             List <i class="fa fa-edit"></i>
                         </a>
-                        <button type="submit" class="btn btn-secondary" >
+                        <button type="submit" class="btn btn-secondary">
                             <i class="fa fa-edit"></i>
                             Save
                         </button>

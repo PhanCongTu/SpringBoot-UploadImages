@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import personal.Tu.Entity.Image;
 import personal.Tu.Repository.IImageRepository;
 import personal.Tu.Service.IImageService;
@@ -28,6 +29,15 @@ public class ImageServiceImpl implements IImageService {
 
     @Override
     public <S extends Image> S save(S entity) {
+        // Kiểm tra sự tồn tại của image
+        Optional<Image> optional = findById(entity.getID());
+        if (optional.isPresent()) {
+            if (StringUtils.isEmpty(entity.getImage())) {
+                entity.setImage(optional.get().getImage());
+            } else {
+                entity.setImage(entity.getImage());
+            }
+        }
         return imageRepository.save(entity);
     }
 

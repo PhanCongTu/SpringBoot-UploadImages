@@ -20,7 +20,7 @@ public class FileSystemStorageServiceImpl implements IStorageService {
     private final Path rootLocation;
 
     @Override
-    public String getStorageFileName(MultipartFile file, int id){
+    public String getStorageFileName(MultipartFile file, String id){
         String ext = FilenameUtils.getExtension(file.getOriginalFilename());
         return "p" + id + "," + ext;
     }

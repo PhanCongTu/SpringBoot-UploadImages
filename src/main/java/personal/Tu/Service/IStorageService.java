@@ -7,7 +7,7 @@ import java.nio.file.Path;
 
 public interface IStorageService {
 
-    String getStorageFileName(MultipartFile file, int id);
+    String getStorageFileName(MultipartFile file, String id);
 
     void store(MultipartFile file, String storeFilename);
 
