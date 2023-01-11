@@ -48,7 +48,7 @@
             <td th:utext="${Image.ID }"></td>
             <td th:utext="${Image.name }"></td>
             <td>
-              <img th:if="${Image.image != null}" th:src="@{/admin/images/${Image.image}}" width="70" class="img-fluid" />
+              <img th:if="${Image.image != null}" th:src="${Image.image}" width="70" class="img-fluid" />
               <img th:if="${Image.image == null}" th:src="@{/images/noimage.jpg}" width="70" class="img-fluid" />
             </td>
             <td>

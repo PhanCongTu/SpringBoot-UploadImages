@@ -1,5 +1,7 @@
 package personal.Tu.Controller;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,10 @@ import personal.Tu.Entity.Image;
 import personal.Tu.Model.ImageModel;
 import personal.Tu.Service.IImageService;
 
+import javax.swing.text.html.parser.Entity;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -21,6 +26,9 @@ import java.util.Optional;
 public class ImageController {
     @Autowired
     IImageService imageService;
+
+    @Autowired
+    Cloudinary cloudinary;
 
     @RequestMapping("")
     public String listImages(ModelMap modelMap){
@@ -47,8 +55,28 @@ public class ImageController {
         Image ImageEntity = new Image();
         // Coppy từ model sang entity
         BeanUtils.copyProperties(image, ImageEntity);
+
+        System.out.println("Check: " + image.getImageFile().isEmpty());
+        // Xử lý hình ảnh lưu file vào cloudinary
+        if (!image.getImageFile().isEmpty()){
+            System.out.println(
+                    "vao if"
+            );
+            try {
+                Map r = this.cloudinary.uploader().upload(image.getImageFile().getBytes(),
+                        ObjectUtils.asMap("resource_type","auto"));
+                String img = (String) r.get("secure_url");
+                System.out.println("vao Try");
+                System.out.println(img);
+                ImageEntity.setImage(img);
+            } catch (IOException e){
+                e.printStackTrace();
+            }
+
+        }
+        System.out.println("truoc khi save");
         imageService.save(ImageEntity);
-        String message = "Video đã được cập nhật thành công";
+        String message = "Image đã được cập nhật thành công";
         model.addAttribute("message", message);
         return new ModelAndView("forward:/admin/Images",model);
     }
